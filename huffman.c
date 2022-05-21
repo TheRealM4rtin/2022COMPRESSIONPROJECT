@@ -37,7 +37,7 @@ void add_freq(struct node **head, int newfreq){
     (*head)->freq += newfreq;
 }
 
-int is_in(int letter, struct node **head){
+int is_in(char letter, struct node **head){
 
     for(; (*head)!=NULL;){
         if( (*head)->data == letter) return 1; //oui
@@ -50,29 +50,27 @@ void occurency(char *fileNAME, struct node **head){
     FILE * file;
     file = fopen(fileNAME,"r");
 
-    node first;
+    node first = Construct(1, getc(file), NULL);
+    head = &first;
     char c;
     
-    /* we need to create the first node but only one time */
-    
-    //It works
-    first = Construct(1, getc(file), NULL);
     printf("first : %c\n", first->data);
-    //It works
-    head = &first;
-    printf("head->fisrt :%c\n", (*head)->data);
+    printf("head->first :%c\n", (*head)->data);
 
-    while (!feof (file)){
-        c = getc(file);
+    while ( (c = getc(file)) != EOF ){
         
-        if (is_in(c, &first) == 1) { //If in the dictionnary
+        if (is_in(c, head) == 1) { //If in the dictionnary
+            printf("%c is in the dico", c);
             add_freq(&first, 1); //not sure
         }
-        if( is_in(c, &first) == 0){ //If not in the dictionnary
+        if( is_in(c, head) == 0){ //If not in the dictionnary
+            printf("%c is Not in the dico\n", c);
             Construct(1, c, NULL);
         }
  
     }
+
+    print(head);
 
     fclose(file);
 }
@@ -83,11 +81,9 @@ int main(){
 
     char *test = "test.txt";
 
-    node A = Construct(0,0, NULL);
+    node A = Construct(0, 0, NULL);
 
     occurency(test, &A);
-
-    print(&A);
     
     return 0;
 }

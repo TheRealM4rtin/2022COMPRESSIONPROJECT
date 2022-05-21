@@ -30,7 +30,7 @@ void Push(struct node **head, char data, int frequence){
 }
 
 void add_freq(struct node **head, int newfreq){
-    *head->freq += newfreq;
+    (*head)->freq += newfreq;
 }
 
 int is_in(int letter, struct node **head){

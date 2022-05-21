@@ -2,42 +2,44 @@
 #include <string.h>
 #include <dirent.h> 
 
-void myfilerecursive(char *basePath)
+void traversal(char *originPath)
 {
     char path[1000];
     struct dirent *dp;
-    DIR *dir = opendir(basePath);
+    DIR *directory = opendir(originPath);
 
    
-    if (!dir)
+    if (!directory) //empty
         return;
 
-    while ((dp = readdir(dir)) != NULL)
+    while ((dp = readdir(directory)) != NULL)
     {
-        if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0)
+        //The strcmp() compares 2 strings char by char. If the strings are =, the fct returns 0.
+        if (strcmp(dp->d_name, "..") != 0 && strcmp(dp->d_name, ".") != 0)
         {
-            printf("%s\n", dp->d_name);
-            strcpy(path, basePath);
+            //The strcpy() fct copies the string pointed by 2 (including the null character) to 1
+            strcpy(path, originPath); //copies originPath to path
+            //the strcat() function contcatenates (joins) 2 strings. cat(destination, source);
             strcat(path, "/");
             strcat(path, dp->d_name);
+            printf("%s\n", path);
 
-            myfilerecursive(path);
+            traversal(path);
         }
     }
 
-    closedir(dir);
+    closedir(directory);
 }
-
 
 
 int main()
 {
    
-    char user[50]; 
+    char path[50]; 
     printf("Please enter path the folder : ");
-    scanf("%s", user);
+    scanf("%s", path);
 
-    myfilerecursive(user);
+    traversal(path);
 
     return 0;
 }

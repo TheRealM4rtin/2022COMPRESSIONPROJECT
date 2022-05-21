@@ -65,7 +65,7 @@ void occurency(char *fileNAME, struct node **head){
         }
         if( is_in(c, head) == 0){ //If not in the dictionnary
             printf("%c is Not in the dico\n", c);
-            Construct(1, c, NULL);
+            (*head)->next = Construct(1, c, NULL);
         }
  
     }

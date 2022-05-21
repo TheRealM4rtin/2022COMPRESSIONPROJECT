@@ -30,13 +30,13 @@ void occurency(char *fileNAME, struct node **head){
     FILE * file;
     file = fopen(fileNAME,"r");
 
-    char c1;
+    char c;
+    
     int i = 0, j=0;
 
-    c1 = getc(file);
 
     while (!feof (file)){
-        c1 = getc(file);
+        c = getc(file);
         
         if (is_in(c, &head) == 1) {
             node->freq += 1;

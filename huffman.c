@@ -18,7 +18,7 @@ node Construct(int freq, char data, node next){
     return new;
 }
 
-vois Push(struct node **head, char data, int frequence){
+void Push(struct node **head, char data, int frequence){
     struct node *temp = (struct node *)malloc(sizeof(struct node));
     temp->data = data;
     temp->freq = frequence;
@@ -49,10 +49,11 @@ void occurency(char *fileNAME, struct node **head){
     while (!feof (file)){
         c = getc(file);
         
-        if (is_in(c, &head) == 1) {
-            node->freq += 1;
+        if (is_in(c, &head) == 1) { //If in the dictionnary
+            Push(head, c, ++); //not sure
+            //problem c'est que push créé un node et rempli pas seulement un parametre
         }
-        if( is_in(c, &head) == 0){
+        if( is_in(c, &head) == 0){ //If not in the dictionnary
             Construct(1, c, NULL);
         }
  
@@ -62,8 +63,8 @@ void occurency(char *fileNAME, struct node **head){
 }
 
 int main(){
-    char * fileNAME ="rle.txt";
 
+    char * fileNAME ="rle.txt";
 
     occurency(fileNAME);
 

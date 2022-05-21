@@ -77,7 +77,7 @@ void occurency(char *fileNAME, struct node **head){
             printf("%c is in the dico\n", c);
             add_freq(head,c, 1);
         }
-        if( is_in(c, head) == 0){ //If not in the dictionnary
+        else /*if( is_in(c, head) == 0)*/{ //If not in the dictionnary
             printf("%c is Not in the dico\n", c);
             //PushEnd(head, c, 1);
             //Push(head, c, 1);

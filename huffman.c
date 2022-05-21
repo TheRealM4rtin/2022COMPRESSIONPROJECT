@@ -17,10 +17,10 @@ node Construct(int freq, char data, node next){
     return new;
 }
 
-int is_in(int bufferplusbyte, struct node **head){
+int is_in(int char, struct node **head){
 
     for(; (*head)!=NULL;){
-        if( (*head)->id == bufferplusbyte) return 1; //oui
+        if( (*head)->id == char) return 1; //oui
         head = &((*head)->next);
     }
     return 0; // non
@@ -38,21 +38,13 @@ void occurency(char *fileNAME, struct node **head){
     while (!feof (file)){
         c1 = getc(file);
         
-        while (i < 500 && c1 != letter[i]) {
-            i++;
+        if (is_in(c, &head) == 1) {
+            node->freq += 1;
+        }
+        if( is_in(c, &head) == 0){
+            Construct(1, c, node->next);
         }
  
-        if (i < 500) { //element found at i+1
-            *freq[i+1]++;
-        } else {        //element not found
-            while (j < 500 && NULL != letter[i]) {
-                i++;
-            }
-            if (j < 500) { //element found at i+1
-                *letter[i+1]=c1;
-                *freq[i+1]=1;
-            }
-        }
     }
 
     fclose(file);

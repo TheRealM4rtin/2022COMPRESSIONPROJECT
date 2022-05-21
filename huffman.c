@@ -8,10 +8,6 @@ typedef struct node {
     struct node *next;
 }* node;
 
-node Create_node(){
-    return NULL;
-}
-
 //Parfait
 node Construct(int freq, char data, node next){
     node new = (node)malloc(sizeof(struct node));
@@ -83,12 +79,11 @@ int main(){
 
     char *test = "test.txt";
 
-    Create_node();
+    node A = Construct(0,0, NULL);
 
-    occurency(test);
+    occurency(test, &A);
 
-    print(node);
+    print(&A);
     
-
     return 0;
 }

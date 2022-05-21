@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct node {      //minHNode
+typedef struct node {      
     char data;
     int freq;
-    struct node *next; //left and right dans internet2
-} *node;
-
+    struct node *next;
+}* node;
+//Parfait
 node Construct(int freq, char data, node next){
-    node new;
-    new = (node)malloc(sizeof(struct node));
+    node new = (node)malloc(sizeof(struct node));
     if(!new) return 0;
     new->freq = id;
     new->data = data;
@@ -17,10 +16,17 @@ node Construct(int freq, char data, node next){
     return new;
 }
 
+vois Push(struct node **head, char data, int frequence){
+    struct node *temp = (struct node *)malloc(sizeof(struct node));
+    temp->data = data;
+    temp->freq = frequence;
+    *head = temp;
+}
+
 int is_in(int char, struct node **head){
 
     for(; (*head)!=NULL;){
-        if( (*head)->id == char) return 1; //oui
+        if( (*head)->data == char) return 1; //oui
         head = &((*head)->next);
     }
     return 0; // non

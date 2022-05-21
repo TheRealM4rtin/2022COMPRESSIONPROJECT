@@ -45,9 +45,13 @@ void PushEnd(struct node **head, char data, int frequence){
 
 void add_freq(struct node **head, char letter, int newfreq){
     
-    for(; (*head)!=NULL;){
-        if( (*head)->data == letter) (*head)->freq += newfreq;
-        head = &((*head)->next);
+    for(;*head;*head=(*head)->next){
+        if( (*head)->data == letter){
+            (*head)->freq += newfreq;
+            printf("blblb");
+        }
+        /*else 
+            head = &((*head)->next);*/
     }
 }
 

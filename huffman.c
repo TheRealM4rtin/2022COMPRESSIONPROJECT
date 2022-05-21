@@ -11,7 +11,7 @@ typedef struct node {
 //Parfait
 node Construct(int freq, char data, node next){
     node new = (node)malloc(sizeof(struct node));
-    if(!new) return 0;
+    //if(!new) return 0;
     new->freq = freq;
     new->data = data;
     new->next = next;
@@ -23,17 +23,24 @@ void print(struct node **head){
     int i = 0;
     for(current = *head; current; current = current->next){
         printf(" - frequence of %c is %d \n", (*head)->data, (*head)->freq);
-        //head = &((*head)->next);
         i++;
     }
-    printf("%d\n", i);
+    printf(" i = %d\n", i);
 }
 
 void Push(struct node **head, char data, int frequence){
     struct node *temp = (struct node *)malloc(sizeof(struct node));
     temp->data = data;
     temp->freq = frequence;
+    temp->next = NULL;
     *head = temp;
+}
+
+void PushEnd(struct node **head, char data, int frequence){
+
+    for(; (*head)!=NULL; )
+        head = &((*head)->next);
+    Push(head, data, frequence);
 }
 
 void add_freq(struct node **head, int newfreq){
@@ -68,10 +75,16 @@ void occurency(char *fileNAME, struct node **head){
         }
         if( is_in(c, head) == 0){ //If not in the dictionnary
             printf("%c is Not in the dico\n", c);
-            (*head)->next = Construct(1, c, NULL);
+            PushEnd(head, c, 1);
         }
  
     }
+
+
+
+
+
+
 
     print(head);
 

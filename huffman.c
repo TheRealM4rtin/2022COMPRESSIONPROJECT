@@ -43,8 +43,12 @@ void PushEnd(struct node **head, char data, int frequence){
     Push(head, data, frequence);
 }
 
-void add_freq(struct node **head, int newfreq){
-    (*head)->freq += newfreq;
+void add_freq(struct node **head, char letter, int newfreq){
+    
+    for(; (*head)!=NULL;){
+        if( (*head)->data == letter) (*head)->freq += newfreq;
+        head = &((*head)->next);
+    }
 }
 
 int is_in(char letter, struct node **head){
@@ -60,7 +64,7 @@ void occurency(char *fileNAME, struct node **head){
     FILE * file;
     file = fopen(fileNAME,"r");
 
-    node first = Construct(1, getc(file), NULL);
+    struct node * first = Construct(1, getc(file), NULL);
     head = &first;
     char c;
     
@@ -71,20 +75,17 @@ void occurency(char *fileNAME, struct node **head){
         
         if (is_in(c, head) == 1) { //If in the dictionnary
             printf("%c is in the dico\n", c);
-            add_freq(&first, 1); //not sure
+            add_freq(head,c, 1);
         }
         if( is_in(c, head) == 0){ //If not in the dictionnary
             printf("%c is Not in the dico\n", c);
-            PushEnd(head, c, 1);
+            //PushEnd(head, c, 1);
+            //Push(head, c, 1);
+            (*head)->next = Construct(1, c, NULL);
+            //head= &(*head)->next;
         }
  
     }
-
-
-
-
-
-
 
     print(head);
 
@@ -97,9 +98,9 @@ int main(){
 
     char *test = "test.txt";
 
-    node un = Construct(0, 0, NULL);
+    struct node ** head = NULL;
 
-    occurency(test, &un);
+    occurency(test, head);
     
     return 0;
 }

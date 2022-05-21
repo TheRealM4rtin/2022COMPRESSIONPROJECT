@@ -31,6 +31,14 @@ void Push(struct node **head, char data, int frequence){
     *head = temp;
 }
 
+void insertSort(struct node **head, char data, int frequence){
+
+    while(*head && (*head)->freq > frequence){ //Attention < >
+        head = &((*head)->next);
+    }
+    Push(head, data, frequence);
+}
+
 void PushEnd(struct node **head, char data, int frequence){
 
     for(; (*head)!=NULL; )
@@ -44,8 +52,6 @@ void add_freq(struct node *head, char letter, int newfreq){
         if( head->data == letter){
             head->freq += newfreq;
         }
-        /*else 
-            head = &((*head)->next);*/
     }
 }
 
@@ -58,20 +64,13 @@ int is_in(char letter, struct node *head){
     return 0; // non
 }
 
-void occurency(char *fileNAME, struct node **head){
+void occurency(char *fileNAME){
     FILE * file;
     file = fopen(fileNAME,"r");
-
-    //struct node * h = Construct(1, getc(file), NULL);
-    //head = &first;
-    //struct node ** last = &(*head);
 
     struct node* h = NULL;
     struct node** a = &h;
     char c;
-
-    //printf("first : %c\n", first->data);
-    //printf("head->first :%c\n", (*head)->data);
 
     while ( (c = getc(file)) != EOF ){
         
@@ -81,12 +80,9 @@ void occurency(char *fileNAME, struct node **head){
         }
         if( is_in(c, h) == 0){ //If not in the dictionnary
             printf("%c is Not in the dico\n", c);
-            //PushEnd(head, c, 1);
-            Push(a, c, 1);
+            insertSort(a, c, 1);
             a = &((*a)->next);
-            //head= &(*head)->next;
         }
- 
     }
 
     print(h);
@@ -100,9 +96,7 @@ int main(){
 
     char *test = "test.txt";
 
-    struct node ** head = NULL;
-
-    occurency(test, head);
+    occurency(test);
     
     return 0;
 }

@@ -25,6 +25,10 @@ void Push(struct node **head, char data, int frequence){
     *head = temp;
 }
 
+void add_freq(struct node **head, int newfreq){
+    head->freq += newfreq;
+}
+
 int is_in(int char, struct node **head){
 
     for(; (*head)!=NULL;){
@@ -50,8 +54,7 @@ void occurency(char *fileNAME, struct node **head){
         c = getc(file);
         
         if (is_in(c, &head) == 1) { //If in the dictionnary
-            Push(head, c, ++); //not sure
-            //problem c'est que push créé un node et rempli pas seulement un parametre
+            add_freq(head, 1); //not sure
         }
         if( is_in(c, &head) == 0){ //If not in the dictionnary
             Construct(1, c, NULL);
@@ -64,9 +67,18 @@ void occurency(char *fileNAME, struct node **head){
 
 int main(){
 
-    char * fileNAME ="rle.txt";
+    // officiel : char * fileNAME ="rle.txt";
 
-    occurency(fileNAME);
+    char *test = "test.txt";
+
+    occurency(test);
+
+//try to print
+    while(*head != NULL){
+        printf("%d", freq);
+        printf("%c", data)
+        head = &((*head)->next);
+    }
 
     return 0;
 }

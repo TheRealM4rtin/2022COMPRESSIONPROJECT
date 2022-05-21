@@ -1,11 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct node0 {      //minHNode
+typedef struct node {      //minHNode
     char data;
     int freq;
-    struct node *next, * down; //left and right dans internet2
-}node0;
+    struct node *next; //left and right dans internet2
+} *node;
+
+node Construct(int freq, char data, node next){
+    node new;
+    new = (node)malloc(sizeof(struct node));
+    if(!new) return 0;
+    new->freq = id;
+    new->data = data;
+    new->next = next;
+    return new;
+}
+
+int is_in(int bufferplusbyte, struct node **head){
+
+    for(; (*head)!=NULL;){
+        if( (*head)->id == bufferplusbyte) return 1; //oui
+        head = &((*head)->next);
+    }
+    return 0; // non
+}
 
 void occurency(char *fileNAME, char *letter[], int *freq[]){
     FILE * file;
@@ -15,8 +34,6 @@ void occurency(char *fileNAME, char *letter[], int *freq[]){
     int i = 0, j=0;
 
     c1 = getc(file);
-    *letter[0]=c1;
-    *freq[0]=1;
 
     while (!feof (file)){
         c1 = getc(file);

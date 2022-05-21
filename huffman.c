@@ -31,13 +31,26 @@ void Push(struct node **head, char data, int frequence){
     *head = temp;
 }
 
-void insertSort(struct node **head, char data, int frequence){
+void swap(struct node **list){
 
-    while(*head && (*head)->freq > frequence){ //Attention < >
-        head = &((*head)->next);
-    }
-    Push(head, data, frequence);
+    struct node * p1 = *list;
+    struct node * p2 = (*list)->next;
+    struct node * p3 = (*list)->next->next;
+    (*list) = p2;
+    p1->next = p3;
+    p2->next = p1;
 }
+
+void Sort(struct node **head){
+    printf("a\n");
+    if((*head)->freq > (*head)->next->freq){
+        swap(head);
+    }else{
+        printf("else\n");
+    }
+    head = &((*head)->next);
+}
+
 
 void PushEnd(struct node **head, char data, int frequence){
 
@@ -59,7 +72,6 @@ int is_in(char letter, struct node *head){
 
     for(;head;head=head->next) {
         if( head->data == letter) return 1; //oui
-         
     }
     return 0; // non
 }
@@ -80,11 +92,15 @@ void occurency(char *fileNAME){
         }
         if( is_in(c, h) == 0){ //If not in the dictionnary
             printf("%c is Not in the dico\n", c);
-            insertSort(a, c, 1);
+            Push(a, c, 1);
             a = &((*a)->next);
         }
     }
 
+    print(h);
+
+    Sort(a);
+    printf("SORTED\n");
     print(h);
 
     fclose(file);

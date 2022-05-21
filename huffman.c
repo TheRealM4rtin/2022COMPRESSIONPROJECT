@@ -18,14 +18,9 @@ node Construct(int freq, char data, node next){
     return new;
 }   
 
-void print(struct node **head){
-    struct node * current;
-    int i = 0;
-    for(current = *head; current; current = current->next){
-        printf(" - frequence of %c is %d \n", (*head)->data, (*head)->freq);
-        i++;
-    }
-    printf(" i = %d\n", i);
+void print(struct node *head){
+    for(;head;head=head->next)
+    printf(" - frequence of %c is %d\n",head->data,head->freq);
 }
 
 void Push(struct node **head, char data, int frequence){
@@ -43,23 +38,22 @@ void PushEnd(struct node **head, char data, int frequence){
     Push(head, data, frequence);
 }
 
-void add_freq(struct node **head, char letter, int newfreq){
+void add_freq(struct node *head, char letter, int newfreq){
     
-    for(;*head;*head=(*head)->next){
-        if( (*head)->data == letter){
-            (*head)->freq += newfreq;
-            printf("blblb\n");
+    for(;head;head=head->next){
+        if( head->data == letter){
+            head->freq += newfreq;
         }
         /*else 
             head = &((*head)->next);*/
     }
 }
 
-int is_in(char letter, struct node **head){
+int is_in(char letter, struct node *head){
 
-    for(; (*head)!=NULL;){
-        if( (*head)->data == letter) return 1; //oui
-        head = &((*head)->next);
+    for(;head;head=head->next) {
+        if( head->data == letter) return 1; //oui
+         
     }
     return 0; // non
 }
@@ -68,30 +62,34 @@ void occurency(char *fileNAME, struct node **head){
     FILE * file;
     file = fopen(fileNAME,"r");
 
-    struct node * first = Construct(1, getc(file), NULL);
-    head = &first;
+    //struct node * h = Construct(1, getc(file), NULL);
+    //head = &first;
+    //struct node ** last = &(*head);
+
+    struct node* h = NULL;
+    struct node** a = &h;
     char c;
-    
-    printf("first : %c\n", first->data);
-    printf("head->first :%c\n", (*head)->data);
+
+    //printf("first : %c\n", first->data);
+    //printf("head->first :%c\n", (*head)->data);
 
     while ( (c = getc(file)) != EOF ){
         
-        if (is_in(c, head) == 1) { //If in the dictionnary
+        if (is_in(c, h) == 1) { //If in the dictionnary
             printf("%c is in the dico\n", c);
-            add_freq(head,c, 1);
+            add_freq(h, c, 1);
         }
-        else /*if( is_in(c, head) == 0)*/{ //If not in the dictionnary
+        if( is_in(c, h) == 0){ //If not in the dictionnary
             printf("%c is Not in the dico\n", c);
             //PushEnd(head, c, 1);
-            //Push(head, c, 1);
-            (*head)->next = Construct(1, c, NULL);
+            Push(a, c, 1);
+            a = &((*a)->next);
             //head= &(*head)->next;
         }
  
     }
 
-    print(head);
+    print(h);
 
     fclose(file);
 }

@@ -20,8 +20,8 @@ node Construct(int freq, char data, node next){
 
 void print(struct node **head){
     for(; (*head)!=NULL;){
-        printf("%d", (*head)->freq);
-        printf("%c", (*head)->data);
+        printf("frequ : %d |", (*head)->freq);
+        printf("data : %c\n", (*head)->data);
         head = &((*head)->next);
     }
 }

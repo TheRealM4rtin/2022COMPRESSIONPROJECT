@@ -19,11 +19,14 @@ node Construct(int freq, char data, node next){
 }   
 
 void print(struct node **head){
-    for(; (*head)!=NULL;){
-        printf("frequ : %d |", (*head)->freq);
-        printf("data : %c\n", (*head)->data);
-        head = &((*head)->next);
+    struct node * current;
+    int i = 0;
+    for(current = *head; current; current = current->next){
+        printf(" - frequence of %c is %d \n", (*head)->data, (*head)->freq);
+        //head = &((*head)->next);
+        i++;
     }
+    printf("%d\n", i);
 }
 
 void Push(struct node **head, char data, int frequence){
@@ -60,7 +63,7 @@ void occurency(char *fileNAME, struct node **head){
     while ( (c = getc(file)) != EOF ){
         
         if (is_in(c, head) == 1) { //If in the dictionnary
-            printf("%c is in the dico", c);
+            printf("%c is in the dico\n", c);
             add_freq(&first, 1); //not sure
         }
         if( is_in(c, head) == 0){ //If not in the dictionnary
@@ -81,9 +84,9 @@ int main(){
 
     char *test = "test.txt";
 
-    node A = Construct(0, 0, NULL);
+    node un = Construct(0, 0, NULL);
 
-    occurency(test, &A);
+    occurency(test, &un);
     
     return 0;
 }

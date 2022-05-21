@@ -48,7 +48,7 @@ void add_freq(struct node **head, char letter, int newfreq){
     for(;*head;*head=(*head)->next){
         if( (*head)->data == letter){
             (*head)->freq += newfreq;
-            printf("blblb");
+            printf("blblb\n");
         }
         /*else 
             head = &((*head)->next);*/

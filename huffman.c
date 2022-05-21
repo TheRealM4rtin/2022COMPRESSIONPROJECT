@@ -8,6 +8,10 @@ typedef struct node {
     struct node *next;
 }* node;
 
+node Create_node(){
+    return NULL;
+}
+
 //Parfait
 node Construct(int freq, char data, node next){
     node new = (node)malloc(sizeof(struct node));
@@ -18,8 +22,12 @@ node Construct(int freq, char data, node next){
     return new;
 }   
 
-node Create_node(){
-    return NULL;
+void print(struct node **head){
+    for(; (*head)!=NULL;){
+        printf("%d", (*head)->freq);
+        printf("%c", (*head)->data);
+        head = &((*head)->next);
+    }
 }
 
 void Push(struct node **head, char data, int frequence){
@@ -79,12 +87,8 @@ int main(){
 
     occurency(test);
 
-//try to print
-    while(*head != NULL){
-        printf("%d", head->freq);
-        printf("%c", head->data);
-        head = &((*head)->next);
-    }
+    print(node);
+    
 
     return 0;
 }

@@ -12,10 +12,14 @@ typedef struct node {
 node Construct(int freq, char data, node next){
     node new = (node)malloc(sizeof(struct node));
     if(!new) return 0;
-    new->freq = id;
+    new->freq = freq;
     new->data = data;
     new->next = next;
     return new;
+}   
+
+node Create_node(){
+    return NULL;
 }
 
 void Push(struct node **head, char data, int frequence){
@@ -29,10 +33,10 @@ void add_freq(struct node **head, int newfreq){
     head->freq += newfreq;
 }
 
-int is_in(int char, struct node **head){
+int is_in(int letter, struct node **head){
 
     for(; (*head)!=NULL;){
-        if( (*head)->data == char) return 1; //oui
+        if( (*head)->data == letter) return 1; //oui
         head = &((*head)->next);
     }
     return 0; // non
@@ -71,12 +75,14 @@ int main(){
 
     char *test = "test.txt";
 
+    Create_node();
+
     occurency(test);
 
 //try to print
     while(*head != NULL){
-        printf("%d", freq);
-        printf("%c", data)
+        printf("%d", head->freq);
+        printf("%c", head->data);
         head = &((*head)->next);
     }
 

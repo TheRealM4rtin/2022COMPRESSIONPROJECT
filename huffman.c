@@ -26,7 +26,7 @@ int is_in(int bufferplusbyte, struct node **head){
     return 0; // non
 }
 
-void occurency(char *fileNAME, char *letter[], int *freq[]){
+void occurency(char *fileNAME, struct node **head){
     FILE * file;
     file = fopen(fileNAME,"r");
 

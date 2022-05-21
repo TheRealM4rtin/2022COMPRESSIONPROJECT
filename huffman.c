@@ -30,10 +30,14 @@ void occurency(char *fileNAME, struct node **head){
     FILE * file;
     file = fopen(fileNAME,"r");
 
-    char c;
+    node** head;
+    char c, onetimehead;
     
-    int i = 0, j=0;
-
+    /* we need to create the first node or the 
+    head but only one time */
+    onetimehead = getc(file);
+    Construct(1, onetimehead, NULL);
+    head = &
 
     while (!feof (file)){
         c = getc(file);
@@ -42,7 +46,7 @@ void occurency(char *fileNAME, struct node **head){
             node->freq += 1;
         }
         if( is_in(c, &head) == 0){
-            Construct(1, c, node->next);
+            Construct(1, c, NULL);
         }
  
     }
@@ -52,12 +56,10 @@ void occurency(char *fileNAME, struct node **head){
 
 int main(){
     char * fileNAME ="rle.txt";
-    //float (*vals)[n] = malloc(sizeof(float[n]));
 
-    char array[500];
-    int freq[500];
 
-    occurency(fileNAME, &array, &freq);
+    occurency(fileNAME);
+
     for(int n = 0; n < 500; ++n) {
         printf("%d ", array[n]);
     }

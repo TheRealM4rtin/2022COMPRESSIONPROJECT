@@ -30,7 +30,7 @@ void Push(struct node **head, char data, int frequence){
 }
 
 void add_freq(struct node **head, int newfreq){
-    head->freq += newfreq;
+    *head->freq += newfreq;
 }
 
 int is_in(int letter, struct node **head){
@@ -46,21 +46,21 @@ void occurency(char *fileNAME, struct node **head){
     FILE * file;
     file = fopen(fileNAME,"r");
 
-    node head;
+    node first;
     char c, charforhead;
     
     /* we need to create the first node but only one time */
     charforhead = getc(file);
-    head = Construct(1, charforhead, NULL);
+    first = Construct(1, charforhead, NULL);
     
 
     while (!feof (file)){
         c = getc(file);
         
-        if (is_in(c, &head) == 1) { //If in the dictionnary
-            add_freq(head, 1); //not sure
+        if (is_in(c, &first) == 1) { //If in the dictionnary
+            add_freq(&first, 1); //not sure
         }
-        if( is_in(c, &head) == 0){ //If not in the dictionnary
+        if( is_in(c, &first) == 0){ //If not in the dictionnary
             Construct(1, c, NULL);
         }
  

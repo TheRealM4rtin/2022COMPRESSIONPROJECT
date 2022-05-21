@@ -51,12 +51,16 @@ void occurency(char *fileNAME, struct node **head){
     file = fopen(fileNAME,"r");
 
     node first;
-    char c, charforhead;
+    char c;
     
     /* we need to create the first node but only one time */
-    charforhead = getc(file);
-    first = Construct(1, charforhead, NULL);
     
+    //It works
+    first = Construct(1, getc(file), NULL);
+    printf("first : %c\n", first->data);
+    //It works
+    head = &first;
+    printf("head->fisrt :%c\n", (*head)->data);
 
     while (!feof (file)){
         c = getc(file);

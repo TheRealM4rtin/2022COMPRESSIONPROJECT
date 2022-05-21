@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//Parfait
 typedef struct node {      
     char data;
     int freq;
     struct node *next;
 }* node;
+
 //Parfait
 node Construct(int freq, char data, node next){
     node new = (node)malloc(sizeof(struct node));
@@ -36,14 +38,13 @@ void occurency(char *fileNAME, struct node **head){
     FILE * file;
     file = fopen(fileNAME,"r");
 
-    node** head;
-    char c, onetimehead;
+    node head;
+    char c, charforhead;
     
-    /* we need to create the first node or the 
-    head but only one time */
-    onetimehead = getc(file);
-    Construct(1, onetimehead, NULL);
-    head = &
+    /* we need to create the first node but only one time */
+    charforhead = getc(file);
+    head = Construct(1, charforhead, NULL);
+    
 
     while (!feof (file)){
         c = getc(file);
@@ -66,9 +67,5 @@ int main(){
 
     occurency(fileNAME);
 
-    for(int n = 0; n < 500; ++n) {
-        printf("%d ", array[n]);
-    }
-    printf("\n");
     return 0;
 }

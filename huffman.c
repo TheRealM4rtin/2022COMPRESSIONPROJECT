@@ -14,6 +14,11 @@ typedef struct nodeT {
     struct nodeT *left, * right;
 } * tree;
 
+typedef struct codingtree {
+    tree data;
+    int freq;
+} * codingtree;
+
 // Parfait
 node Construct(int freq, char data, node next)
 {
@@ -101,14 +106,12 @@ void save(struct node **head){
     struct node * p1 = *head;
     struct node * p2 = (*head)->next;
 
-    struct node * result ;
+    struct codingtree * result ;
     result->freq= (p1->freq) + (p2->freq);
 
-    struct nodeT * final;
+    result->data = ConstructT(' ', ConstructT(p1->data, NULL, NULL), ConstructT(p2->data, NULL, NULL));
 
-    final->data = ConstructT(' ', ConstructT(p1->data, NULL, NULL), ConstructT(p2->data, NULL, NULL));
-
-    final->next = (*head)->next->next;
+    result->next = (*head)->next->next;
 
     free(*head);
     free((*head)->next);

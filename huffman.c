@@ -17,6 +17,7 @@ typedef struct nodeT {
 typedef struct codingtree {
     tree data;
     int freq;
+    struct codingtree *next;
 } * codingtree;
 
 // Parfait

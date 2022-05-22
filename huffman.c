@@ -104,9 +104,11 @@ void save(struct node **head){
     struct node * result ;
     result->freq= (p1->freq) + (p2->freq);
 
-    result->data = Construct(' ', Construct(p1->data, NULL, NULL), Construct(p2->data, NULL, NULL))
+    struct nodeT * final;
 
-    result->next = (*head)->next->next;
+    final->data = ConstructT(' ', ConstructT(p1->data, NULL, NULL), ConstructT(p2->data, NULL, NULL));
+
+    final->next = (*head)->next->next;
 
     free(*head);
     free((*head)->next);

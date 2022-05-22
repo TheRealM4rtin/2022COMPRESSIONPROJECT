@@ -35,14 +35,14 @@ void print(struct node *head) {
         printf(" - frequence of %c is %d\n", head->data, head->freq);
 }
 
-void Push(struct node **head, char data, int frequence) {
-    struct node *temp = (struct node *)malloc(sizeof(struct node));
-    temp = ConstructAll(frequence, data, NULL, NULL, NULL, NULL);
+void Push(struct node **head, int frequence, char data, node n, tree l, tree r, tree c) {
+    node temp = (node)malloc(sizeof(node));
+    temp = ConstructAll(frequence, data, n, l, r, c);
     *head = temp;
 }
 
 void SortedInsert(struct node** headRef, struct node* newNode) {
-    struct node* current = *headRef;
+    node current = *headRef;
     // Special case for the head end
     if (*headRef == NULL || (*headRef)->freq >= newNode->freq) {
         newNode->next = *headRef;
@@ -93,14 +93,18 @@ void CodingTree(struct node **head){
         node tree_2 = ConstructAll(node_2->freq, node_2->data, NULL, NULL, NULL, NULL);
         int sum = (tree_1->freq) + (tree_2->freq);
         
+        //This is a tree made with 2 trees
         node treeresult = ConstructAll(0, ' ', NULL, tree_1, tree_2, NULL);
         
-        node node_tree = ConstructAll( sum , ' ', (*head)->next->next, NULL, NULL, treeresult);
+        //This is a node of a LL made with treeresult 
+        //node node_tree = ConstructAll( sum , ' ', (*head)->next->next, NULL, NULL, treeresult);
+        
+        Push(head, sum, ' ', (*head)->next->next, NULL, NULL, treeresult);
 
-        
-        
         printTREE(treeresult);
-        printf("\n");
+
+        printf("blblb");
+
         current = current->next;
     }
     
@@ -136,7 +140,7 @@ void occurency(char *fileNAME)
         if (is_in(c, h) == 0)
         { // If not in the dictionnary
             printf("%c is Not in the dico\n", c);
-            Push(a, c, 1);
+            Push(a, 1, c, NULL, NULL, NULL, NULL);
             a = &((*a)->next);
         }
     }

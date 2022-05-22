@@ -36,6 +36,7 @@ void Push(struct node **head, char data, int frequence)
 }
 
 void SortedInsert(struct node** headRef, struct node* newNode) {
+    struct node* current = *headRef;
     // Special case for the head end
     if (*headRef == NULL || (*headRef)->freq >= newNode->freq) {
         newNode->next = *headRef;
@@ -43,7 +44,6 @@ void SortedInsert(struct node** headRef, struct node* newNode) {
     }
     else {
         // Locate the node before the point of insertion
-        struct node* current = *headRef;
         while (current->next!=NULL && current->next->freq<newNode->freq) {
             current = current->next;
         }
@@ -88,6 +88,26 @@ int is_in(char letter, struct node *head)
     }
     return 0; // non
 }
+//__________________
+
+void save(struct node **head){
+
+    //save les deux premier
+    struct node * p1 = *head;
+    struct node * p2 = (*head)->next;
+
+
+}
+
+
+
+
+
+
+
+
+
+
 
 //_______________________________________________________________________________________________________
 
@@ -109,7 +129,7 @@ int Length(struct node* head) {
 }
 
 //_______________________________________________________________________________________________________
-typedef struct nodeT {
+typedef struct node_tree {
     char data;
     struct nodeT *left, * right;
 }* tree;

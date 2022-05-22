@@ -1,6 +1,61 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <dirent.h> 
+
+const char *text = ".txt";
+const char *pic = ".bmp";
+
+struct node
+{
+    char* c;
+    struct node *next;
+};
+
+void print(struct node *head)
+{
+    for (; head; head = head->next)
+        printf(" - the string is %s\n", head->c);
+}
+
+void Push(struct node **head, char* data)
+{
+    struct node *temp = (struct node *)malloc(sizeof(struct node));
+    temp->c = data;
+    temp->next = NULL;
+    *head = temp;
+}
+
+/*The strstr function takes two char pointer arguments,
+the first denoting the string to search in
+and the other denoting the string to search for.*/
+
+void comparison(struct node *head){
+    FILE * header;
+
+    header = fopen("header.txt", "a");
+    for (; head; head = head->next){
+        char *comp= (head->c);
+
+        char * test1 = strstr(comp, text);
+        char * test2 = strstr(comp, pic);
+
+        if (test1 || test2){
+            printf("found file to compress : %s\n", comp);
+            fprintf(header, "%s\n", comp);
+        }
+        else
+            printf("This is a not to compress : %s\n", comp);
+
+        /*if (test1)
+            printf("found .txt file to compress : %s\n", comp);
+        else if (test2)
+            printf("found .bmp file to compress : %s\n", comp);
+        else
+            printf("This is a not to compress : %s\n", comp);*/
+    }
+    fclose(header);
+}
 
 void traversal(char *originPath)
 {
@@ -8,7 +63,8 @@ void traversal(char *originPath)
     struct dirent *dp;
     DIR *directory = opendir(originPath);
 
-   
+    struct node *head;
+
     if (!directory) //empty
         return;
 
@@ -22,23 +78,22 @@ void traversal(char *originPath)
             //the strcat() function contcatenates (joins) 2 strings. cat(destination, source);
             strcat(path, "/");
             strcat(path, dp->d_name);
-            printf("%s\n", path);
 
+            Push(&head, path);
+            comparison(head);
             traversal(path);
         }
     }
-
     closedir(directory);
 }
 
-
 int main()
 {
-   
     char path[50]; 
+    fclose(fopen("header.txt", "w"));
+    
     printf("Please enter path the folder : ");
     scanf("%s", path);
-
     traversal(path);
 
     return 0;

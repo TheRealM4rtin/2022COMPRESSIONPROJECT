@@ -96,7 +96,10 @@ void save(struct node **head){
     struct node * p1 = *head;
     struct node * p2 = (*head)->next;
 
-
+    struct node * result ;
+    result->freq= (p1->freq) + (p2->freq);
+    
+     
 }
 
 

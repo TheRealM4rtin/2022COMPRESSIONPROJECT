@@ -35,26 +35,6 @@ void Push(struct node **head, char data, int frequence)
     *head = temp;
 }
 
-/*
-void swap(struct node **list){
-
-    struct node * p1 = *list;
-    struct node * p2 = (*list)->next;
-    struct node * p3 = (*list)->next->next;
-    (*list) = p2;
-    p1->next = p3;
-    p2->next = p1;
-}
-
-void Sort(struct node **head){
-    printf("a\n");
-    if((*head)->freq > (*head)->next->freq){
-        swap(head);
-    }else{
-        printf("else\n");
-    }
-    head = &((*head)->next);
-}*/
 void SortedInsert(struct node** headRef, struct node* newNode) {
     // Special case for the head end
     if (*headRef == NULL || (*headRef)->freq >= newNode->freq) {
@@ -72,7 +52,6 @@ void SortedInsert(struct node** headRef, struct node* newNode) {
     }
 }
 
-//_______________________________________________________________________________________________________
 
 // Given a list, change it to be in sorted order (using SortedInsert()).
 void InsertSort(struct node** headRef) {
@@ -80,19 +59,12 @@ void InsertSort(struct node** headRef) {
     struct node* current = *headRef; // iterate over the original list
     struct node* next;
     while (current!=NULL) {
-        next = current->next; // tricky - note the next pointer before we change it
+        next = current->next; // save the next pointer before we change it
         SortedInsert(&result, current);
         current = next;
     }
     *headRef = result;
 }
-/*
-void PushEnd(struct node **head, char data, int frequence){
-
-    for(; (*head)!=NULL; )
-        head = &((*head)->next);
-    Push(head, data, frequence);
-}*/
 
 void add_freq(struct node *head, char letter, int newfreq)
 {
@@ -116,6 +88,97 @@ int is_in(char letter, struct node *head)
     }
     return 0; // non
 }
+
+//_______________________________________________________________________________________________________
+
+void Pop(struct node** headRef) {
+    struct node* head;
+    head = *headRef;
+    *headRef = head->next; // unlink the head node for the caller
+    free(head); // free the head node
+}
+
+int Length(struct node* head) {
+    int count = 0;
+    struct node* current = head;
+    while (current != NULL) {
+        count++;
+        current = current->next;   
+    }
+    return(count);
+}
+
+//_______________________________________________________________________________________________________
+typedef struct nodeT {
+    char data;
+    struct nodeT *left, * right;
+}* tree;
+
+//very useful
+tree ConstructT (char data, tree left, tree right){
+    tree B = (tree)malloc(sizeof(struct nodeT));
+    B->data = data;
+    B->left = left; //first (smaller freq) letter
+    B->right = right; //second smaller freq letter
+    return B;
+}
+
+//print coding tree
+void printTREE(tree B){
+    if (B!=NULL)
+    {
+        if (B->left != NULL || B->right !=NULL)
+        {
+            printf("1 ");
+        }
+        printTREE(B->left);
+        printTREE(B->right);
+        if (B->left == NULL && B->right == NULL)
+        {
+            printf("0%c ", B->data);
+        }
+    }
+}
+
+//added by me
+void createsubTree(struct node *head)
+{
+    while ((Length(head))!=1)
+    {
+        tree tr = ConstructT(' ', ConstructT(head->data, NULL, NULL), ConstructT(head->next->data, NULL, NULL));
+        //printTREE(tr);
+        int temp = head->freq + head->next->freq;
+        Push(&head, ' ', temp);
+        Pop(&head);
+        Pop(&head);
+        InsertSort(&head);
+        print(head);
+    }
+}
+
+//rebuild the tree from coding tree string
+int i=0;
+tree build(char s[]){
+    //end of string == \0
+    if (s[i]!='\0')
+    {
+        if (s[i]=='1')
+        {
+            i++;
+            tree left = build(s);
+            i++;
+            tree right = build(s);
+            return ConstructT(' ', left, right);
+        }else{
+            if (s[i]=='0')
+            {
+                i++;
+                return ConstructT(s[i], NULL, NULL);
+            }
+        }
+    }
+}
+//_______________________________________________________________________________________________________
 
 void occurency(char *fileNAME)
 {
@@ -144,10 +207,11 @@ void occurency(char *fileNAME)
 
     print(h);
 
-    // Sort(a);
     InsertSort(&h);
     printf("SORTED\n");
     print(h);
+
+    createsubTree(h);
 
     fclose(file);
 }
@@ -160,6 +224,8 @@ int main()
     char *test = "test.txt";
 
     occurency(test);
+
+    
 
     return 0;
 }

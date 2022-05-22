@@ -1,48 +1,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Parfait
-typedef struct node
-{
-    char data;
+typedef struct node {
     int freq;
-    struct node *next;
-} * node;
-
-typedef struct nodeT {
     char data;
-    struct nodeT *left, * right;
-} * tree;
+    struct node *left, * right, *next, *child;
+}* tree, * node, * node_tree;
 
-typedef struct codingtree {
-    tree data;
-    int freq;
-    struct codingtree *next;
-} * codingtree;
-
-// Parfait
-node Construct(int freq, char data, node next)
-{
+node ConstructAll(int frequence, char d, node n, tree l, tree r, tree c){
     node new = (node)malloc(sizeof(struct node));
-    // if(!new) return 0;
-    new->freq = freq;
-    new->data = data;
-    new->next = next;
+
+    new->freq = frequence;
+    new->data = d;
+    new->left = l;
+    new->right = r;
+    new->next = n;
+    new->child = c;
+
     return new;
 }
 
-void print(struct node *head)
-{
+void printTREE(tree B) {
+    if (B!=NULL)
+    {
+        if (B->left != NULL || B->right !=NULL) printf("1 ");
+        printTREE(B->left);
+        printTREE(B->right);
+        if (B->left == NULL && B->right == NULL) printf("0%c ", B->data);
+    }
+}
+
+void print(struct node *head) {
     for (; head; head = head->next)
         printf(" - frequence of %c is %d\n", head->data, head->freq);
 }
 
-void Push(struct node **head, char data, int frequence)
-{
+void Push(struct node **head, char data, int frequence) {
     struct node *temp = (struct node *)malloc(sizeof(struct node));
-    temp->data = data;
-    temp->freq = frequence;
-    temp->next = NULL; // pq égal à NULL et pas *head ?
+    temp = ConstructAll(frequence, data, NULL, NULL, NULL, NULL);
     *head = temp;
 }
 
@@ -63,161 +58,63 @@ void SortedInsert(struct node** headRef, struct node* newNode) {
     }
 }
 
-
-// Given a list, change it to be in sorted order (using SortedInsert()).
 void InsertSort(struct node** headRef) {
-    struct node* result = NULL; // build the answer here
-    struct node* current = *headRef; // iterate over the original list
+    struct node* result = NULL;
+    struct node* current = *headRef; 
     struct node* next;
     while (current!=NULL) {
-        next = current->next; // save the next pointer before we change it
+        next = current->next;
         SortedInsert(&result, current);
         current = next;
     }
     *headRef = result;
 }
 
-void add_freq(struct node *head, char letter, int newfreq)
-{
-
-    for (; head; head = head->next)
-    {
-        if (head->data == letter)
-        {
-            head->freq += newfreq;
-        }
-    }
+void add_freq(struct node *head, char letter, int newfreq) {
+    for(; head; head = head->next)
+        if (head->data == letter) head->freq += newfreq;
 }
 
-int is_in(char letter, struct node *head)
-{
-
+int is_in(char letter, struct node *head) {
     for (; head; head = head->next)
-    {
-        if (head->data == letter)
-            return 1; // oui
-    }
+        if (head->data == letter) return 1;
     return 0; // non
 }
-//_______________________________
 
-void save(struct node **head){
+void CodingTree(struct node **head){
+    node current = *head;
 
-    //save les deux premier
-    struct node * p1 = *head;
-    struct node * p2 = (*head)->next;
+    while(current) {
 
-    struct codingtree * result ;
-    result->freq= (p1->freq) + (p2->freq);
+        node node_1 = *head;
+        node node_2 = (*head)->next;
 
-    result->data = ConstructT(' ', ConstructT(p1->data, NULL, NULL), ConstructT(p2->data, NULL, NULL));
+        node tree_1 = ConstructAll(node_1->freq, node_1->data, NULL, NULL, NULL, NULL);
+        node tree_2 = ConstructAll(node_2->freq, node_2->data, NULL, NULL, NULL, NULL);
+        int sum = (tree_1->freq) + (tree_2->freq);
+        
+        node treeresult = ConstructAll(0, ' ', NULL, tree_1, tree_2, NULL);
+        
+        node node_tree = ConstructAll( sum , ' ', (*head)->next->next, NULL, NULL, treeresult);
 
-    result->next = (*head)->next->next;
+        
+        
+        printTREE(treeresult);
+        printf("\n");
+        current = current->next;
+    }
+    
 
+/*
     free(*head);
     free((*head)->next);
-
+    free(node_1);
+    free(node_2);
+*/
 
 
 }
 
-
-
-
-
-
-
-
-
-
-
-//_______________________________________________________________________________________________________
-
-void Pop(struct node** headRef) {
-    struct node* head;
-    head = *headRef;
-    *headRef = head->next; // unlink the head node for the caller
-    free(head); // free the head node
-}
-
-int Length(struct node* head) {
-    int count = 0;
-    struct node* current = head;
-    while (current != NULL) {
-        count++;
-        current = current->next;   
-    }
-    return(count);
-}
-
-//_______________________________________________________________________________________________________
-
-
-//very useful
-tree ConstructT (char data, tree left, tree right){
-    tree B = (tree)malloc(sizeof(struct nodeT));
-    B->data = data;
-    B->left = left; //first (smaller freq) letter
-    B->right = right; //second smaller freq letter
-    return B;
-}
-
-//print coding tree
-void printTREE(tree B){
-    if (B!=NULL)
-    {
-        if (B->left != NULL || B->right !=NULL)
-        {
-            printf("1 ");
-        }
-        printTREE(B->left);
-        printTREE(B->right);
-        if (B->left == NULL && B->right == NULL)
-        {
-            printf("0%c ", B->data);
-        }
-    }
-}
-
-//added by me
-void createsubTree(struct node *head)
-{
-    while ((Length(head))!=1)
-    {
-        tree tr = ConstructT(' ', ConstructT(head->data, NULL, NULL), ConstructT(head->next->data, NULL, NULL));
-        //printTREE(tr);
-        int temp = head->freq + head->next->freq;
-        Push(&head, ' ', temp);
-        Pop(&head);
-        Pop(&head);
-        InsertSort(&head);
-        print(head);
-    }
-}
-
-//rebuild the tree from coding tree string
-int i=0;
-tree build(char s[]){
-    //end of string == \0
-    if (s[i]!='\0')
-    {
-        if (s[i]=='1')
-        {
-            i++;
-            tree left = build(s);
-            i++;
-            tree right = build(s);
-            return ConstructT(' ', left, right);
-        }else{
-            if (s[i]=='0')
-            {
-                i++;
-                return ConstructT(s[i], NULL, NULL);
-            }
-        }
-    }
-}
-//_______________________________________________________________________________________________________
 
 void occurency(char *fileNAME)
 {
@@ -243,28 +140,19 @@ void occurency(char *fileNAME)
             a = &((*a)->next);
         }
     }
-
-    print(h);
-
     InsertSort(&h);
-    printf("SORTED\n");
     print(h);
 
-    createsubTree(h);
+    CodingTree(&h);
 
+
+    
     fclose(file);
 }
 
 int main()
 {
-
-    // officiel : char * fileNAME ="rle.txt";
-
     char *test = "test.txt";
-
     occurency(test);
 
-    
-
-    return 0;
 }

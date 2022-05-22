@@ -9,6 +9,11 @@ typedef struct node
     struct node *next;
 } * node;
 
+typedef struct nodeT {
+    char data;
+    struct nodeT *left, * right;
+} * tree;
+
 // Parfait
 node Construct(int freq, char data, node next)
 {
@@ -88,7 +93,7 @@ int is_in(char letter, struct node *head)
     }
     return 0; // non
 }
-//__________________
+//_______________________________
 
 void save(struct node **head){
 
@@ -98,8 +103,8 @@ void save(struct node **head){
 
     struct node * result ;
     result->freq= (p1->freq) + (p2->freq);
-    
-     
+
+
 }
 
 
@@ -132,10 +137,7 @@ int Length(struct node* head) {
 }
 
 //_______________________________________________________________________________________________________
-typedef struct node_tree {
-    char data;
-    struct nodeT *left, * right;
-}* tree;
+
 
 //very useful
 tree ConstructT (char data, tree left, tree right){

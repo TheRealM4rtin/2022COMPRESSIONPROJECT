@@ -76,32 +76,32 @@ void add_freq(struct node *head, char letter, int newfreq) {
 int is_in(char letter, struct node *head) {
     for (; head; head = head->next)
         if (head->data == letter) return 1;
-    return 0; // non
+    return 0; // is not in
 }
 
 void CodingTree(struct node **head){
     node current = *head;
 
     while(current) {
-
+        printf("AAZ");    
         node node_1 = *head;
         node node_2 = (*head)->next;
-
+        printf("A");
         tree tree_1 = ConstructAll(node_1->freq, node_1->data, NULL, NULL, NULL, NULL);
         tree tree_2 = ConstructAll(node_2->freq, node_2->data, NULL, NULL, NULL, NULL);
         int sum = (tree_1->freq) + (tree_2->freq);
         
         //This is a tree made with 2 trees
+        printf("BB");
         tree treeresult = ConstructAll(0, ' ', NULL, tree_1, tree_2, NULL);
         
         //This is a node of a LL made with treeresult 
         //node node_tree = ConstructAll( sum , ' ', (*head)->next->next, NULL, NULL, treeresult);
         
         Push(head, sum, ' ', (*head)->next->next, NULL, NULL, treeresult);
-
-        printTREE(treeresult);
-
-        printf("blblb");
+        printf("AA");
+        node node_tree = ConstructAll(sum, ' ', (*head)->next->next, NULL, NULL, treeresult);
+        printTREE(node_tree);
 
         current = current->next;
     }
@@ -144,9 +144,9 @@ void occurency(char *fileNAME)
     }
     InsertSort(&h);
     print(h);
-
-    //CodingTree(&h);
-
+    printf("a");
+    CodingTree(a);
+    printf("b");
 
     
     fclose(file);

@@ -5,7 +5,7 @@ typedef struct node {
     int freq;
     char data;
     struct node *left, * right, *next, *child;
-}* tree, * node, * node_tree;
+}* node, * tree;
 
 node ConstructAll(int frequence, char d, node n, tree l, tree r, tree c){
     node new = (node)malloc(sizeof(struct node));
@@ -59,9 +59,7 @@ void SortedInsert(struct node** headRef, struct node* newNode) {
 }
 
 void InsertSort(struct node** headRef) {
-    struct node* result = NULL;
-    struct node* current = *headRef; 
-    struct node* next;
+    node result = NULL, current = *headRef, next;
     while (current!=NULL) {
         next = current->next;
         SortedInsert(&result, current);
@@ -89,12 +87,12 @@ void CodingTree(struct node **head){
         node node_1 = *head;
         node node_2 = (*head)->next;
 
-        node tree_1 = ConstructAll(node_1->freq, node_1->data, NULL, NULL, NULL, NULL);
-        node tree_2 = ConstructAll(node_2->freq, node_2->data, NULL, NULL, NULL, NULL);
+        tree tree_1 = ConstructAll(node_1->freq, node_1->data, NULL, NULL, NULL, NULL);
+        tree tree_2 = ConstructAll(node_2->freq, node_2->data, NULL, NULL, NULL, NULL);
         int sum = (tree_1->freq) + (tree_2->freq);
         
         //This is a tree made with 2 trees
-        node treeresult = ConstructAll(0, ' ', NULL, tree_1, tree_2, NULL);
+        tree treeresult = ConstructAll(0, ' ', NULL, tree_1, tree_2, NULL);
         
         //This is a node of a LL made with treeresult 
         //node node_tree = ConstructAll( sum , ' ', (*head)->next->next, NULL, NULL, treeresult);
@@ -125,8 +123,8 @@ void occurency(char *fileNAME)
     FILE *file;
     file = fopen(fileNAME, "r");
 
-    struct node *h = NULL;
-    struct node **a = &h;
+    node h = NULL;
+    node *a = &h;
     char c;
 
     while ((c = getc(file)) != EOF)
@@ -147,7 +145,7 @@ void occurency(char *fileNAME)
     InsertSort(&h);
     print(h);
 
-    CodingTree(&h);
+    //CodingTree(&h);
 
 
     

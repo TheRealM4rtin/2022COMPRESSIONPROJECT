@@ -79,9 +79,10 @@ void PushPath(struct NodePath **head, char* data)
 }
 
 void comparison(struct NodePath *head){
-    char *small = "~/Desktop/FCtemporary/header.txt";
+    char * small = "~/Desktop/FCtemporary/header.txt";
     FILE * header;
-    header = fopen(small, "a");
+    //header = fopen(small, "a");
+    header = fopen("/home/?/Desktop/FCtemporary/header.txt", "a"); // ? = eliott or user
 
     if( header == NULL ) {
         printf("Couldn't open %s\n", small);

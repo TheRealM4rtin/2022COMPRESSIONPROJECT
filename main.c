@@ -39,7 +39,7 @@ double compressionRate(char *fileNAME, char *compNAME){
 
 //========================================================================================================//
 
-void BlankRemovalComp(char *fileNAME, char * baseCompNAME, char * pathTemp){
+void BlankRemovalComp(char *fileNAME, char * baseCompNAME, char * pathTemp, double * compressRate){
     FILE * file;
     file = fopen(fileNAME,"r");
 
@@ -78,10 +78,11 @@ void BlankRemovalComp(char *fileNAME, char * baseCompNAME, char * pathTemp){
     }
     fclose(file);
     fclose(comp);
+    
+    double compRate = compressionRate(fileNAME, compNAME);
 
-    double compRate;
-    compRate = compressionRate(fileNAME, compNAME);
-
+    compressRate = &compRate;
+    
     FILE * stat;
     char statNAME[50];
     sprintf(statNAME, "%s/stat.txt", pathTemp);
@@ -90,12 +91,11 @@ void BlankRemovalComp(char *fileNAME, char * baseCompNAME, char * pathTemp){
     char temp[555];
     sprintf(temp, "%s - %s - BR - Compression Rate : %f\n", fileNAME, compNAME, compRate);
     fprintf(stat, "%s", temp);
-    //printf("%s", temp);
 
     fclose(stat);
 }
 
-void RLEComp(char *fileNAME, char *baseCompNAME, char *pathTemp){
+void RLEComp(char *fileNAME, char *baseCompNAME, char *pathTemp, double * compressRate){
     FILE * file;
     file = fopen(fileNAME,"r");
 
@@ -139,9 +139,10 @@ void RLEComp(char *fileNAME, char *baseCompNAME, char *pathTemp){
     }
     fclose(file);
     fclose(comp);
-    double compRate;
 
-    compRate = compressionRate(fileNAME, compNAME);
+    double compRate = compressionRate(fileNAME, compNAME);
+
+    compressRate = &compRate;
 
     FILE * stat;
     char statNAME[50];
@@ -151,7 +152,6 @@ void RLEComp(char *fileNAME, char *baseCompNAME, char *pathTemp){
     char temp[555];
     sprintf(temp, "%s - %s - RLE - Compression Rate : %f\n", fileNAME, compNAME, compRate);
     fprintf(stat, "%s", temp);
-    //printf("%s", temp);
 
     fclose(stat);
 }
@@ -195,13 +195,24 @@ void comparison(struct NodePath *head, char * pathHeader, char * nameFile){
         char *compar= (head->c);
         char * test1 = strstr(compar, text);
         char * test2 = strstr(compar, pic);
-
+        double * compressRate1, *compressRate2;
         if (test1 || test2){
             printf("This is a file to compress : %s\n", compar);
             fprintf(header, "%s\n", compar);
-            BlankRemovalComp(compar, nameFile, pathHeader);
-            RLEComp(compar, nameFile, pathHeader);
-            //comparaison de compression rate
+            
+            BlankRemovalComp(compar, nameFile, pathHeader, compressRate1);
+
+            RLEComp(compar, nameFile, pathHeader, compressRate2);
+
+            if (compressRate1>compressRate2)
+            {
+                /* keep BR compression
+                    write in the header : name of the file - Blank Removal Compression*/
+            }else
+            {
+                /* keep RLE compression
+                    write in the header : name of the file - RLE Compression*/
+            }
         }
         else
             printf("This is not a file  to compress : %s\n", compar);
@@ -227,13 +238,7 @@ void traversal(char *originPath, char * PathHeader)
         //The strcmp() compares 2 strings char by char. If the strings are =, the fct returns 0.
         if (strcmp(dp->d_name, "..") != 0 && strcmp(dp->d_name, ".") != 0)
         {
-            //The strcpy() fct copies the string pointed by 2 (including the null character) to 1
-            strcpy(path, originPath); //copies originPath to path
- 
-            //the strcat() function contcatenates (joins) 2 strings. cat(destination, source);
-            strcat(path, "/");
-            strcat(path, dp->d_name);
-            //printf("\n1e   %s\n", dp->d_name);//the name of the file :)
+            sprintf(path, "%s/%s", originPath, dp->d_name);
 
             PushPath(&head, path);
             comparison(head, PathHeader, dp->d_name);
@@ -258,25 +263,24 @@ int main()
 
     char PathHeader[555]="";
     sprintf(PathHeader, "/home/%s/Desktop/FCtemporary/header.txt", username);
-    //clean the header file text from last execution
+    //clean the header file text from last writtings
     fclose(fopen(PathHeader, "w"));
 
     char PathStat[555]="";
     sprintf(PathStat, "/home/%s/Desktop/FCtemporary/stat.txt", username);
-    //clean the header file text from last execution
+    //clean the stat file text from last writtings
     fclose(fopen(PathStat, "w"));
 
+    //string to temporary file, to store different compression etc.
     char fileTemp[555]="";
     sprintf(fileTemp, "/home/%s/Desktop/FCtemporary", username);
-
-    //____________________________________________________
 
     //string to put the path of the user
     char path[50]="";
     printf("Please enter path the folder : ");
     scanf("%s", path);
 
-    //fonction to get the .txt etc in the folder chosen
+    //fonction to get all the files to compress in the folder chosen
     traversal(path, fileTemp);
 
     return 0;

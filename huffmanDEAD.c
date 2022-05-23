@@ -88,9 +88,8 @@ int is_in(char letter, struct list *list) {
     return 0; // is not in
 }
 
-tree CodingTree(struct list **head){
+void CodingTree(struct list **head){
     list * current = head ;
-    tree final = NULL;
 
     while( (*current)->next) {
         list node_1 = *head;
@@ -115,7 +114,6 @@ tree CodingTree(struct list **head){
         current = &((*current)->next);
     }
     
-    return final;
 }
 
 

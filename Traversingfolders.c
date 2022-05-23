@@ -41,18 +41,11 @@ void comparison(struct node *head){
         char * test2 = strstr(comp, pic);
 
         if (test1 || test2){
-            printf("found file to compress : %s\n", comp);
+            printf("file to compress : %s\n", comp);
             fprintf(header, "%s\n", comp);
         }
         else
-            printf("This is a not to compress : %s\n", comp);
-
-        /*if (test1)
-            printf("found .txt file to compress : %s\n", comp);
-        else if (test2)
-            printf("found .bmp file to compress : %s\n", comp);
-        else
-            printf("This is a not to compress : %s\n", comp);*/
+            printf("not a file to compress : %s\n", comp);
     }
     fclose(header);
 }
@@ -65,7 +58,7 @@ void traversal(char *originPath)
 
     struct node *head;
 
-    if (!directory) //empty
+    if (!directory)
         return;
 
     while ((dp = readdir(directory)) != NULL)
@@ -73,11 +66,7 @@ void traversal(char *originPath)
         //The strcmp() compares 2 strings char by char. If the strings are =, the fct returns 0.
         if (strcmp(dp->d_name, "..") != 0 && strcmp(dp->d_name, ".") != 0)
         {
-            //The strcpy() fct copies the string pointed by 2 (including the null character) to 1
-            strcpy(path, originPath); //copies originPath to path
-            //the strcat() function contcatenates (joins) 2 strings. cat(destination, source);
-            strcat(path, "/");
-            strcat(path, dp->d_name);
+            sprintf(path, "%s/%s", originPath, dp->d_name);
 
             Push(&head, path);
             comparison(head);
@@ -90,12 +79,11 @@ void traversal(char *originPath)
 int main()
 {
     char path[50]; 
-    fclose(fopen("header.txt", "w"));
     
+    fclose(fopen("header.txt", "w"));
     printf("Please enter path the folder : ");
     scanf("%s", path);
     traversal(path);
 
     return 0;
 }
-

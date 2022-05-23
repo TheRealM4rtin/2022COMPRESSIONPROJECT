@@ -81,8 +81,6 @@ int is_in(char letter, struct node *head) {
 
 void CodingTree(struct node **head){
     node * current = head ;
-    int i = 0;
-
 
     while( (*current)->next) {
         node node_1 = *head;
@@ -106,30 +104,7 @@ void CodingTree(struct node **head){
         print(*head);
 
         current = &((*current)->next);
-/*
-
-        tree treeresult = ConstructAll(0, ' ', NULL, tree_1, tree_2, NULL);
-        
-        //This is a node of a LL made with treeresult 
-        //node node_tree = ConstructAll( sum , ' ', (*head)->next->next, NULL, NULL, treeresult);
-        
-        Push(head, sum, ' ', (*head)->next->next, NULL, NULL, treeresult);
-        printf("AA");
-        node node_tree = ConstructAll(sum, ' ', (*head)->next->next, NULL, NULL, treeresult);
-        printTREE(node_tree);
-
-        current = current->next;*/
     }
-    
-
-/*
-    free(*head);
-    free((*head)->next);
-    free(node_1);
-    free(node_2);
-*/
-
-
 }
 
 

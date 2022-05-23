@@ -89,13 +89,13 @@ double compressionRate(char *fileNAME, char *compNAME){
     {
         I++;
     }
-    printf("%f\n", I);
+    //printf("%f\n", I);
 
     while ((c = getc(comp)) != EOF)
     {
         F++;
     }
-    printf("%f\n", F);
+    //printf("%f\n", F);
 
     rate = (100-((F/I)*100));
 

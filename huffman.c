@@ -84,33 +84,30 @@ void CodingTree(struct node **head){
     int i = 0;
 
 
-    while( (*current)->next != NULL) {
-        i++;
-        printf("LOOP : %d\n", i);
+    while( (*current)->next) {
         node node_1 = *head;
         node node_2 = (*head)->next;
-
-        printf("freqn1 : %d freqn2 : %d\n", node_1->freq, node_2->freq);
+        printf("---------------------\n");
 
 
         tree tree_1 = ConstructAll(node_1->freq, node_1->data, NULL, NULL, NULL, NULL);
         tree tree_2 = ConstructAll(node_2->freq, node_2->data, NULL, NULL, NULL, NULL);
         int sum = (tree_1->freq) + (tree_2->freq);
-        printf("freqt1 : %d freqt2 : %d\n", tree_1->freq, tree_2->freq);
 
         tree treeresult = ConstructAll(0, ' ', NULL, tree_1, tree_2, NULL);
 
         node node_tree = ConstructAll(sum, ' ', (*head)->next->next, NULL, NULL, treeresult);
 
         Push(head, sum, ' ', (*head)->next->next, NULL, NULL, treeresult);
-        printf("Total FREQ : %d\n", node_tree->freq);
+        printf("Total FREQ : %d", node_tree->freq);
+        
+        InsertSort(head);
+        printf("\n");
+        print(*head);
 
         current = &((*current)->next);
 /*
 
-
-        //This is a tree made with 2 trees
-        printf("BB");
         tree treeresult = ConstructAll(0, ' ', NULL, tree_1, tree_2, NULL);
         
         //This is a node of a LL made with treeresult 
@@ -161,8 +158,9 @@ void occurency(char *fileNAME)
         }
     }
     InsertSort(&h);
+    printf("\n####TABLE OF OCCURENCES####\n");
     print(h);
-
+    printf("###########################\n\n");
     CodingTree(&h);  
     fclose(file);
 }

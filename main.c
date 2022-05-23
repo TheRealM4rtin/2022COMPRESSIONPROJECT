@@ -8,6 +8,37 @@ const char *pic = ".bmp";
 
 //========================================================================================================//
 
+double compressionRate(char *fileNAME, char *compNAME){
+    FILE * file;
+    FILE * comp;
+    file = fopen(fileNAME,"r");
+    comp = fopen(compNAME,"r");
+
+    char c;
+    double I=0, F=0;
+    double rate;
+
+    while ((c = getc(file)) != EOF)
+    {
+        I++;
+    }
+    //printf("%f\n", I);
+
+    while ((c = getc(comp)) != EOF)
+    {
+        F++;
+    }
+    //printf("%f\n", F);
+
+    rate = (100-((F/I)*100));
+
+    fclose(file);
+    fclose(comp);
+    return rate;
+}
+
+//========================================================================================================//
+
 void BlankRemovalComp(char *fileNAME, char * baseCompNAME, char * pathTemp){
     FILE * file;
     file = fopen(fileNAME,"r");
@@ -47,6 +78,21 @@ void BlankRemovalComp(char *fileNAME, char * baseCompNAME, char * pathTemp){
     }
     fclose(file);
     fclose(comp);
+
+    double compRate;
+    compRate = compressionRate(fileNAME, compNAME);
+
+    FILE * stat;
+    char statNAME[50];
+    sprintf(statNAME, "%s/stat.txt", pathTemp);
+    stat = fopen(statNAME, "a");
+
+    char temp[555];
+    sprintf(temp, "%s - %s - BR - Compression Rate : %f\n", fileNAME, compNAME, compRate);
+    fprintf(stat, "%s", temp);
+    //printf("%s", temp);
+
+    fclose(stat);
 }
 
 void RLEComp(char *fileNAME, char *baseCompNAME, char *pathTemp){
@@ -93,6 +139,21 @@ void RLEComp(char *fileNAME, char *baseCompNAME, char *pathTemp){
     }
     fclose(file);
     fclose(comp);
+    double compRate;
+
+    compRate = compressionRate(fileNAME, compNAME);
+
+    FILE * stat;
+    char statNAME[50];
+    sprintf(statNAME, "%s/stat.txt", pathTemp);
+    stat = fopen(statNAME, "a");
+
+    char temp[555];
+    sprintf(temp, "%s - %s - RLE - Compression Rate : %f\n", fileNAME, compNAME, compRate);
+    fprintf(stat, "%s", temp);
+    //printf("%s", temp);
+
+    fclose(stat);
 }
 
 //========================================================================================================//
@@ -128,7 +189,7 @@ void comparison(struct NodePath *head, char * pathHeader, char * nameFile){
     if( header == NULL ) {
         printf("Couldn't open %s\n", realPathHeader);
         exit(1);
-    }else    printf("Could open %s\n",realPathHeader);
+    }//else    printf("Could open %s\n",realPathHeader);
 
     for (; head; head = head->next){
         char *compar= (head->c);
@@ -140,6 +201,7 @@ void comparison(struct NodePath *head, char * pathHeader, char * nameFile){
             fprintf(header, "%s\n", compar);
             BlankRemovalComp(compar, nameFile, pathHeader);
             RLEComp(compar, nameFile, pathHeader);
+            //comparaison de compression rate
         }
         else
             printf("This is not a file  to compress : %s\n", compar);
@@ -188,6 +250,7 @@ int main()
     system("mkdir ~/Desktop/FCtemporary");
     system("touch ~/Desktop/FCtemporary/header.txt");
     system("chmod +rw ~/Desktop/FCtemporary/header.txt");
+    system("touch ~/Desktop/FCtemporary/stat.txt");
 
     char username[50];
     printf("Please enter the session's user name : ");
@@ -197,6 +260,11 @@ int main()
     sprintf(PathHeader, "/home/%s/Desktop/FCtemporary/header.txt", username);
     //clean the header file text from last execution
     fclose(fopen(PathHeader, "w"));
+
+    char PathStat[555]="";
+    sprintf(PathStat, "/home/%s/Desktop/FCtemporary/stat.txt", username);
+    //clean the header file text from last execution
+    fclose(fopen(PathStat, "w"));
 
     char fileTemp[555]="";
     sprintf(fileTemp, "/home/%s/Desktop/FCtemporary", username);

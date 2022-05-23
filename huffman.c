@@ -9,25 +9,29 @@ typedef struct node {
 
 node ConstructAll(int frequence, char d, node n, tree l, tree r, tree c){
     node new = (node)malloc(sizeof(struct node));
-
     new->freq = frequence;
     new->data = d;
     new->left = l;
     new->right = r;
     new->next = n;
     new->child = c;
-
     return new;
 }
 
-void printTREE(tree B) {
+void printtree(tree B){
     if (B!=NULL)
     {
-        if (B->left != NULL || B->right !=NULL) printf("1 ");
-        printTREE(B->left);
-        printTREE(B->right);
-        if (B->left == NULL && B->right == NULL) printf("0%c ", B->data);
-    }
+        if (B->left != NULL || B->right !=NULL)
+        {
+            printf("1 ");
+        }
+        printtree(B->left);
+        printtree(B->right);
+        if (B->left == NULL && B->right == NULL)
+        {
+            printf("0%c ", B->data);
+        }
+    }else{}
 }
 
 void print(struct node *head) {
@@ -35,10 +39,11 @@ void print(struct node *head) {
         printf(" - frequence of %c is %d\n", head->data, head->freq);
 }
 
-void Push(struct node **head, int frequence, char data, node n, tree l, tree r, tree c) {
-    node temp = (node)malloc(sizeof(node));
+
+void PushTree(tree T, int frequence, char data, node n, tree l, tree r, tree c){
+    tree temp = (tree)malloc(sizeof(node));
     temp = ConstructAll(frequence, data, n, l, r, c);
-    *head = temp;
+    T = temp;
 }
 
 void SortedInsert(struct node** headRef, struct node* newNode) {
@@ -94,10 +99,12 @@ void CodingTree(struct node **head){
 
         tree treeresult = ConstructAll(0, ' ', NULL, tree_1, tree_2, NULL);
 
-        node node_tree = ConstructAll(sum, ' ', (*head)->next->next, NULL, NULL, treeresult);
+        //node node_tree = ConstructAll(sum, ' ', (*head)->next->next, NULL, NULL, treeresult);
+        
+        /* Push in the head */
+        *head = ConstructAll(sum, ' ', (*head)->next->next, NULL, NULL, treeresult);
 
-        Push(head, sum, ' ', (*head)->next->next, NULL, NULL, treeresult);
-        printf("Total FREQ : %d", node_tree->freq);
+        //printf("Total FREQ : %d", node_tree->freq);
         
         InsertSort(head);
         printf("\n");
@@ -105,6 +112,7 @@ void CodingTree(struct node **head){
 
         current = &((*current)->next);
     }
+    
 }
 
 
@@ -128,7 +136,7 @@ void occurency(char *fileNAME)
         if (is_in(c, h) == 0)
         { // If not in the dictionnary
             printf("%c is Not in the dico\n", c);
-            Push(a, 1, c, NULL, NULL, NULL, NULL);
+            *a = ConstructAll(1, c, NULL, NULL, NULL, NULL);
             a = &((*a)->next);
         }
     }
@@ -136,7 +144,12 @@ void occurency(char *fileNAME)
     printf("\n####TABLE OF OCCURENCES####\n");
     print(h);
     printf("###########################\n\n");
-    CodingTree(&h);  
+     
+   
+    CodingTree(&h);
+    
+
+
     fclose(file);
 }
 

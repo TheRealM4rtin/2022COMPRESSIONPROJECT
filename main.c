@@ -7,21 +7,14 @@ const char *text = ".txt";
 const char *pic = ".bmp";
 
 //========================================================================================================//
-/*
-void BlankRemovalComp(char *fileNAME){
+
+void BlankRemovalComp(char *fileNAME, char * baseCompNAME){
     FILE * file;
-    FILE * comp;
-
-    
-    
-    //maybe put header in the same directory
-    //need a paper '-'
-    
-
-    char * compNAME = "compressed.txt";
-    //char *compNAME="";
-    //sprintf(compNAME, "compressed%s", fileNAME);
     file = fopen(fileNAME,"r");
+
+    FILE * comp;
+    char * compNAME;
+    sprintf(compNAME, "compBR%s", baseCompNAME);
     comp = fopen(compNAME,"w");
 
     char c;
@@ -55,7 +48,7 @@ void BlankRemovalComp(char *fileNAME){
     fclose(file);
     fclose(comp);
 }
-*/
+
 //========================================================================================================//
 
 struct NodePath
@@ -78,16 +71,14 @@ void PushPath(struct NodePath **head, char* data)
     *head = temp;
 }
 
-void comparison(struct NodePath *head){
-    char * small = "/home/mario/Desktop/FCtemporary/header.txt";
+void comparison(struct NodePath *head, char * pathHeader, char * nameFile){
     FILE * header;
-    header = fopen(small, "a");
+    header = fopen(pathHeader, "a");
 
     if( header == NULL ) {
-        printf("Couldn't open %s\n", small);
+        printf("Couldn't open %s\n", pathHeader);
         exit(1);
     }
-    //header = fopen("header.txt", "a");
 
     for (; head; head = head->next){
         char *comp= (head->c);
@@ -97,8 +88,7 @@ void comparison(struct NodePath *head){
         if (test1 || test2){
             printf("This is a file to compress : %s\n", comp);
             fprintf(header, "%s\n", comp);
-
-            //BlankRemovalComp(comp);
+            BlankRemovalComp(comp, nameFile);
         }
         else
             printf("This is not a file  to compress : %s\n", comp);
@@ -108,13 +98,15 @@ void comparison(struct NodePath *head){
 
 //========================================================================================================//
 
-void traversal(char *originPath)
+void traversal(char *originPath, char * PathHeader)
 {
     char path[1000];
     struct dirent *dp;
     DIR *directory = opendir(originPath);
 
     struct NodePath *head;
+
+    
 
     if (!directory)
         return;
@@ -126,13 +118,15 @@ void traversal(char *originPath)
         {
             //The strcpy() fct copies the string pointed by 2 (including the null character) to 1
             strcpy(path, originPath); //copies originPath to path
+ 
             //the strcat() function contcatenates (joins) 2 strings. cat(destination, source);
             strcat(path, "/");
             strcat(path, dp->d_name);
+            //printf("\n1e   %s\n", dp->d_name);//the name of the file :)
 
             PushPath(&head, path);
-            comparison(head);
-            traversal(path);
+            comparison(head, PathHeader, dp->d_name);
+            traversal(path, PathHeader);
         }
     }
 
@@ -147,13 +141,22 @@ int main()
     system("touch ~/Desktop/FCtemporary/header.txt");
     system("chmod +rw ~/Desktop/FCtemporary/header.txt");
 
-    //string to put the path of the client
+    char username[50];
+    printf("Please enter the session's user name : ");
+    scanf("%s", username);
+
+    char PathHeader[555];
+    sprintf(PathHeader, "/home/%s/Desktop/FCtemporary/header.txt", username); //need just /home/%s/Desktop/FCtemporary
+    //clean the header file text from last execution
+    fclose(fopen(PathHeader, "w"));
+
+    //string to put the path of the user
     char path[50];
-    printf("Please enter path the folder : ");
+    printf("\nPlease enter path the folder : ");
     scanf("%s", path);
 
     //fonction to get the .txt etc in the folder chosen
-    traversal(path);
+    traversal(path, PathHeader);
 
     return 0;
 }

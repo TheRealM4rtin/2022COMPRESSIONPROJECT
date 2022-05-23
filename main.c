@@ -7,10 +7,20 @@ const char *text = ".txt";
 const char *pic = ".bmp";
 
 //========================================================================================================//
-
-void BlankRemovalComp(char *fileNAME, char *compNAME){
+/*
+void BlankRemovalComp(char *fileNAME){
     FILE * file;
     FILE * comp;
+
+    
+    
+    //maybe put header in the same directory
+    //need a paper '-'
+    
+
+    char * compNAME = "compressed.txt";
+    //char *compNAME="";
+    //sprintf(compNAME, "compressed%s", fileNAME);
     file = fopen(fileNAME,"r");
     comp = fopen(compNAME,"w");
 
@@ -45,7 +55,7 @@ void BlankRemovalComp(char *fileNAME, char *compNAME){
     fclose(file);
     fclose(comp);
 }
-
+*/
 //========================================================================================================//
 
 struct NodePath
@@ -68,11 +78,16 @@ void PushPath(struct NodePath **head, char* data)
     *head = temp;
 }
 
-void comparison(struct NodePath *head, struct NodePath *newNode){
+void comparison(struct NodePath *head){
+    char *small = "~/Desktop/FCtemporary/header.txt";
     FILE * header;
-    header = fopen("header.txt", "a");
+    header = fopen(small, "a");
 
-    //struct NodePath *newNode;
+    if( header == NULL ) {
+        printf("Couldn't open %s\n", small);
+        exit(1);
+    }
+    //header = fopen("header.txt", "a");
 
     for (; head; head = head->next){
         char *comp= (head->c);
@@ -80,19 +95,14 @@ void comparison(struct NodePath *head, struct NodePath *newNode){
         char * test2 = strstr(comp, pic);
 
         if (test1 || test2){
+            printf("This is a file to compress : %s\n", comp);
             fprintf(header, "%s\n", comp);
-            //créer nouveau ll rempli que de pt txt
-            PushPath(&newNode, head->c);
 
-            /*
-            char new[555]="";
-            sprintf(new, "compressed%d.txt", count);
-            printf("%d\n", count);
-            //BlankRemovalComp(comp, new);*/
+            //BlankRemovalComp(comp);
         }
-        else    printf("This is a file not to compress : %s\n", comp);
+        else
+            printf("This is not a file  to compress : %s\n", comp);
     }
-    print(newNode);
     fclose(header);
 }
 
@@ -105,9 +115,9 @@ void traversal(char *originPath)
     DIR *directory = opendir(originPath);
 
     struct NodePath *head;
-    struct NodePath *newNode;
 
-    if (!directory)     return;
+    if (!directory)
+        return;
 
     while ((dp = readdir(directory)) != NULL)
     {
@@ -121,8 +131,7 @@ void traversal(char *originPath)
             strcat(path, dp->d_name);
 
             PushPath(&head, path);
-            comparison(head, newNode);
-            //print(newNode);
+            comparison(head);
             traversal(path);
         }
     }
@@ -134,8 +143,10 @@ void traversal(char *originPath)
 
 int main()
 {
-    //clean the header from last execution
-    fclose(fopen("header.txt", "w"));
+    system("mkdir ~/Desktop/FCtemporary");
+    system("touch ~/Desktop/FCtemporary/header.txt");
+    system("chmod +rw ~/Desktop/FCtemporary/header.txt");
+
     //string to put the path of the client
     char path[50];
     printf("Please enter path the folder : ");

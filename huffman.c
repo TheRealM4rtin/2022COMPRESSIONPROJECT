@@ -95,27 +95,16 @@ void CodingTree(struct list **head){
         list node_1 = *head;
         list node_2 = (*head)->next;
         printf("---------------------\n");
-
         int sum = (node_1->freq) + (node_2->freq);
-
         tree treeresult = ConstructTree(' ', node_1->tree, node_2->tree);
-        
         /* Push in the head */ 
-        *head = ConstructList(sum, (*head)->next->next, treeresult);
-
-    
-
-        //printf("Total FREQ : %d", list_tree->freq);
-        
+        *head = ConstructList(sum, (*head)->next->next, treeresult);    
         InsertSort(head);
         printf("\n");
         print(*head);
-
         current = &((*current)->next);
     }
-    
 }
-
 
 void occurency(char *fileNAME)
 {
@@ -126,7 +115,6 @@ void occurency(char *fileNAME)
     list *a = &h;
     tree T = NULL;
     char c;
-
 
     while ((c = getc(file)) != EOF) {
 
@@ -141,11 +129,8 @@ void occurency(char *fileNAME)
             T = ConstructTree(c, NULL, NULL);
             *a = ConstructList(1, NULL, T);
             a = &((*a)->next);
-        }
-        
+        }   
     }
-    
-    
     InsertSort(&h);
     printf("\n####TABLE OF OCCURENCES####\n");
     print(h);
